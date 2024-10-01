@@ -88,24 +88,6 @@ LeftGroupBox:AddSlider('shootSpread', {
 })
 
 local RightGroupbox = Tabs.Main:AddRightGroupbox('Groupbox #3');
-RightGroupbox:AddToggle('ControlToggle', { Text = 'Dependency box toggle' });
-
-local Depbox = RightGroupbox:AddDependencyBox();
-Depbox:AddToggle('DepboxToggle', { Text = 'Sub-dependency box toggle' });
-
--- We can also nest dependency boxes!
--- When we do this, our SupDepbox automatically relies on the visiblity of the Depbox - on top of whatever additional dependencies we set
-local SubDepbox = Depbox:AddDependencyBox();
-SubDepbox:AddSlider('DepboxSlider', { Text = 'Slider', Default = 50, Min = 0, Max = 100, Rounding = 0 });
-SubDepbox:AddDropdown('DepboxDropdown', { Text = 'Dropdown', Default = 1, Values = {'a', 'b', 'c'} });
-
-Depbox:SetupDependencies({
-    { Toggles.ControlToggle, true } -- We can also pass `false` if we only want our features to show when the toggle is off!
-});
-
-SubDepbox:SetupDependencies({
-    { Toggles.DepboxToggle, true }
-});
 
 -- Library functions
 -- Sets the watermark visibility
