@@ -3,7 +3,7 @@
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/refs/heads/main/'
 
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
-local esp, esp_renderstep, framework = loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostDuckyy/ESP-Library/refs/heads/main/nomercy.rip/source.lua"))();
+local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Exunys-ESP/main/src/ESP.lua"))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
@@ -51,6 +51,7 @@ local function toggleTableAttribute(attribute, value)
         end
     end
 end
+LeftGroupBoxMain:AddLabel('Client side!')
 LeftGroupBoxMain:AddSlider('shootCoolDown', {
     Text = 'Shoot Cooldown',
     Default = 0,
@@ -96,32 +97,153 @@ RightGroupboxMain:AddToggle('MyToggle', {
     Tooltip = 'Player esp, that it', -- Information shown when you hover over the toggle
 
     Callback = function(Value)
-        print(Value)
-        local players = game.players;
-        for _, player in pairs(players:GetPlayers()) do
-            if player == players.LocalPlayer then continue; end;
-            esp:Player(player);
-        end;
-        players.PlayerAdded:Connect(function(player)
-            esp:Player(player);
-        end);
-        players.PlayerAdded:Connect(function(player)
-            local obj = esp:GetObject(player)
-            if obj then
-                obj:Destroy();
-            end;
-        end);
-
-        esp.Settings.Enabled = Value;
-        esp.Settings.Maximal_Distance = 500;
-        esp.Settings.Object_Maximal_Distance = 500;
-
-        esp.Settings.Box.Enabled = true;
-        esp.Settings.Box_Outline.Enabled = true;
-
-        esp.Settings.Name.Enabled = true;
-        esp.Settings.Name.Position = "Bottom";
-            end
+        getgenv().ExunysDeveloperESP = {
+            DeveloperSettings = {
+                Path = "Exunys Developer/Exunys ESP/Configuration.cfg",
+                UnwrapOnCharacterAbsence = false,
+                UpdateMode = "RenderStepped",
+                TeamCheckOption = "TeamColor",
+                RainbowSpeed = 1, -- Bigger = Slower
+                WidthBoundary = 1.5 -- Smaller Value = Bigger Width
+            },
+        
+            Settings = {
+                Enabled = true,
+                PartsOnly = false,
+                TeamCheck = true,
+                AliveCheck = true,
+                LoadConfigOnLaunch = true,
+                EnableTeamColors = false,
+                TeamColor = Color3.fromRGB(170, 170, 255),
+                StretchScreenResoultion = false,
+                StretchAmount = 0.75
+            },
+        
+            Properties = {
+                ESP = {
+                    Enabled = true,
+                    RainbowColor = false,
+                    RainbowOutlineColor = false,
+                    Offset = 10,
+        
+                    Color = Color3.fromRGB(255, 255, 255),
+                    Transparency = 1,
+                    Size = 14,
+                    Font = DrawingFonts.Plex, -- Direct2D Fonts: {UI, System, Plex, Monospace}; ROBLOX Fonts: {Roboto, Legacy, SourceSans, RobotoMono}
+        
+                    OutlineColor = Color3.fromRGB(0, 0, 0),
+                    Outline = true,
+        
+                    DisplayDistance = true,
+                    DisplayHealth = false,
+                    DisplayName = false,
+                    DisplayDisplayName = true,
+                    DisplayTool = true
+                },
+        
+                Tracer = {
+                    Enabled = true,
+                    RainbowColor = false,
+                    RainbowOutlineColor = false,
+                    Position = 1, -- 1 = Bottom; 2 = Center; 3 = Mouse
+        
+                    Transparency = 1,
+                    Thickness = 1,
+                    Color = Color3.fromRGB(255, 255, 255),
+        
+                    Outline = true,
+                    OutlineColor = Color3.fromRGB(0, 0, 0)
+                },
+        
+                HeadDot = {
+                    Enabled = true,
+                    RainbowColor = false,
+                    RainbowOutlineColor = false,
+        
+                    Color = Color3.fromRGB(255, 255, 255),
+                    Transparency = 1,
+                    Thickness = 1,
+                    NumSides = 30,
+                    Filled = false,
+        
+                    OutlineColor = Color3.fromRGB(0, 0, 0),
+                    Outline = true
+                },
+        
+                Box = {
+                    Enabled = true,
+                    RainbowColor = false,
+                    RainbowOutlineColor = false,
+        
+                    Color = Color3.fromRGB(255, 255, 255),
+                    Transparency = 1,
+                    Thickness = 1,
+                    Filled = false,
+        
+                    OutlineColor = Color3.fromRGB(0, 0, 0),
+                    Outline = true
+                },
+        
+                HealthBar = {
+                    Enabled = true,
+                    RainbowOutlineColor = false,
+                    Offset = 4,
+                    Blue = 100,
+                    Position = 3, -- 1 = Top; 2 = Bottom; 3 = Left; 4 = Right
+        
+                    Thickness = 1,
+                    Transparency = 1,
+        
+                    OutlineColor = Color3.fromRGB(0, 0, 0),
+                    Outline = true
+                },
+        
+                Crosshair = {
+                    Enabled = true,
+                    RainbowColor = false,
+                    RainbowOutlineColor = false,
+                    TStyled = false,
+                    Position = 1, -- 1 = Mouse; 2 = Center
+        
+                    Size = 12,
+                    GapSize = 6,
+                    Rotation = 0,
+        
+                    Rotate = false,
+                    RotateClockwise = true,
+                    RotationSpeed = 5,
+        
+                    PulseGap = false,
+                    PulsingStep = 10,
+                    PulsingSpeed = 5,
+                    PulsingBounds = {4, 8}, -- {...}[1] => GapSize Min; {...}[2] => GapSize Max
+        
+                    Color = Color3.fromRGB(0, 255, 0),
+                    Thickness = 1,
+                    Transparency = 1,
+        
+                    OutlineColor = Color3.fromRGB(0, 0, 0),
+                    Outline = true,
+        
+                    CenterDot = {
+                        Enabled = true,
+                        RainbowColor = false,
+                        RainbowOutlineColor = false,
+        
+                        Radius = 2,
+        
+                        Color = Color3.fromRGB(0, 255, 0),
+                        Transparency = 1,
+                        Thickness = 1,
+                        NumSides = 60,
+                        Filled = false,
+        
+                        OutlineColor = Color3.fromRGB(0, 0, 0),
+                        Outline = true
+                    }
+                }
+            }
+        }
 })
 
 -- Library functions
