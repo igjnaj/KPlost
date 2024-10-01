@@ -42,7 +42,7 @@ local MyButton = LeftGroupBoxMain:AddButton({
         print('You clicked a button!')
     end,
     DoubleClick = false,
-    Tooltip = 'This is the main button'
+    Tooltip = 'This is the main button',
 })
 local function toggleTableAttribute(attribute, value)
     for _, gcVal in pairs(getgc(true)) do
