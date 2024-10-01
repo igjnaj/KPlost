@@ -1,9 +1,9 @@
--- New example script written by wally
--- You can suggest changes with a pull request or something
+-- Placeid: 17625359962, Nothing changed, in 1v1? nothing, Begin 1v1? nothing just a private server lol
 
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/refs/heads/main/'
 
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local esp, esp_renderstep, framework = loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostDuckyy/ESP-Library/refs/heads/main/nomercy.rip/source.lua"))();
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
@@ -12,30 +12,31 @@ local Window = Library:CreateWindow({
     Center = true,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 0.4
+    MenuFadeTime = 0
 })
 local Tabs = {
     Main = Window:AddTab('Main'),
+    Misc = Window:AddTab('Misc'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
-local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Groupbox')
-LeftGroupBox:AddLabel('HIGH RISK OF BAN! Use on an ALT!')
-LeftGroupBox:AddToggle('MyToggle', {
+local LeftGroupBoxMain = Tabs.Misc:AddLeftGroupbox('Gun')
+LeftGroupBoxMain:AddLabel('HIGH RISK OF BAN! Use on an ALT!')
+LeftGroupBoxMain:AddToggle('MyToggle', {
     Text = 'This is a toggle',
     Default = true, -- Default value (true / false)
-    Tooltip = 'This is a tooltip', -- Information shown when you hover over the toggle
+    Tooltip = 'PlaceHolder Toggle', -- Information shown when you hover over the toggle
 
     Callback = function(Value)
         print('[cb] MyToggle changed to:', Value)
     end
 })
-Toggles.MyToggle:OnChanged(function()
-    -- here we get our toggle object & then get its value
-    print('MyToggle changed to:', Toggles.MyToggle.Value)
-end)
-Toggles.MyToggle:SetValue(false)
-local MyButton = LeftGroupBox:AddButton({
+--Toggles.MyToggle:OnChanged(function()
+--    -- here we get our toggle object & then get its value
+--    print('MyToggle changed to:', Toggles.MyToggle.Value)
+--end)
+--Toggles.MyToggle:SetValue(false)
+local MyButton = LeftGroupBoxMain:AddButton({
     Text = 'Button',
     Func = function()
         print('You clicked a button!')
@@ -50,7 +51,7 @@ local function toggleTableAttribute(attribute, value)
         end
     end
 end
-LeftGroupBox:AddSlider('shootCoolDown', {
+LeftGroupBoxMain:AddSlider('shootCoolDown', {
     Text = 'Shoot Cooldown',
     Default = 0,
     Min = 0,
@@ -62,7 +63,7 @@ LeftGroupBox:AddSlider('shootCoolDown', {
         toggleTableAttribute("ShootCooldown", Value)
     end
 })
-LeftGroupBox:AddSlider('shootRecoil', {
+LeftGroupBoxMain:AddSlider('shootRecoil', {
     Text = 'Shoot Recoil',
     Default = 0,
     Min = 0,
@@ -74,7 +75,7 @@ LeftGroupBox:AddSlider('shootRecoil', {
         toggleTableAttribute("ShootRecoil", Value)
     end
 })
-LeftGroupBox:AddSlider('shootSpread', {
+LeftGroupBoxMain:AddSlider('shootSpread', {
     Text = 'Shoot Spread',
     Default = 0,
     Min = 0,
@@ -86,8 +87,42 @@ LeftGroupBox:AddSlider('shootSpread', {
         toggleTableAttribute("ShootSpread", Value)
     end
 })
+local RightGroupboxMisc = Tabs.Main:AddRightGroupbox('placeHolder');
 
-local RightGroupbox = Tabs.Main:AddRightGroupbox('Groupbox #3');
+local RightGroupboxMain = Tabs.Main:AddRightGroupbox('ESP and AIM');
+RightGroupboxMain:AddToggle('MyToggle', {
+    Text = 'Player ESP',
+    Default = false, -- Default value (true / false)
+    Tooltip = 'Player esp, that it', -- Information shown when you hover over the toggle
+
+    Callback = function(Value)
+        print(Value)
+        local players = game.Players;
+        for _, player in pairs(players:GetPlayers()) do
+            if player == players.LocalPlayer then continue; end;
+            esp:Player(player);
+        end;
+        players.PlayerAdded:Connect(function(player)
+            esp:Player(player);
+        end);
+        players.PlayerAdded:Connect(function(player)
+            local obj = esp:GetObject(player)
+            if obj then
+                obj:Destroy();
+            end;
+        end);
+
+        esp.Settings.Enabled = Value;
+        esp.Settings.Maximal_Distance = 500;
+        esp.Settings.Object_Maximal_Distance = 500;
+
+        esp.Settings.Box.Enabled = true;
+        esp.Settings.Box_Outline.Enabled = true;
+
+        esp.Settings.Name.Enabled = true;
+        esp.Settings.Name.Position = "Bottom";
+            end
+})
 
 -- Library functions
 -- Sets the watermark visibility
@@ -123,7 +158,7 @@ Library:OnUnload(function()
 end)
 
 -- UI Settings
-local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+local MenuGroup = Tabs['UI Settings']:AddLeftGroupBox('Menu')
 
 -- I set NoUI so it does not show up in the keybinds menu
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
