@@ -34,7 +34,6 @@ Toggles.MyToggle:OnChanged(function()
     -- here we get our toggle object & then get its value
     print('MyToggle changed to:', Toggles.MyToggle.Value)
 end)
-==
 Toggles.MyToggle:SetValue(false)
 local MyButton = LeftGroupBox:AddButton({
     Text = 'Button',
