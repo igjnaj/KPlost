@@ -97,153 +97,52 @@ RightGroupboxMain:AddToggle('MyToggle', {
     Tooltip = 'Player esp, that it', -- Information shown when you hover over the toggle
 
     Callback = function(Value)
-        getgenv().ExunysDeveloperESP = {
-            DeveloperSettings = {
-                Path = "Exunys Developer/Exunys ESP/Configuration.cfg",
-                UnwrapOnCharacterAbsence = false,
-                UpdateMode = "RenderStepped",
-                TeamCheckOption = "TeamColor",
-                RainbowSpeed = 1, -- Bigger = Slower
-                WidthBoundary = 1.5 -- Smaller Value = Bigger Width
-            },
-        
-            Settings = {
-                Enabled = true,
-                PartsOnly = false,
-                TeamCheck = true,
-                AliveCheck = true,
-                LoadConfigOnLaunch = true,
-                EnableTeamColors = false,
-                TeamColor = Color3.fromRGB(170, 170, 255),
-                StretchScreenResoultion = false,
-                StretchAmount = 0.75
-            },
-        
-            Properties = {
-                ESP = {
-                    Enabled = true,
-                    RainbowColor = false,
-                    RainbowOutlineColor = false,
-                    Offset = 10,
-        
-                    Color = Color3.fromRGB(255, 255, 255),
-                    Transparency = 1,
-                    Size = 14,
-                    Font = DrawingFonts.Plex, -- Direct2D Fonts: {UI, System, Plex, Monospace}; ROBLOX Fonts: {Roboto, Legacy, SourceSans, RobotoMono}
-        
-                    OutlineColor = Color3.fromRGB(0, 0, 0),
-                    Outline = true,
-        
-                    DisplayDistance = true,
-                    DisplayHealth = false,
-                    DisplayName = false,
-                    DisplayDisplayName = true,
-                    DisplayTool = true
-                },
-        
-                Tracer = {
-                    Enabled = true,
-                    RainbowColor = false,
-                    RainbowOutlineColor = false,
-                    Position = 1, -- 1 = Bottom; 2 = Center; 3 = Mouse
-        
-                    Transparency = 1,
-                    Thickness = 1,
-                    Color = Color3.fromRGB(255, 255, 255),
-        
-                    Outline = true,
-                    OutlineColor = Color3.fromRGB(0, 0, 0)
-                },
-        
-                HeadDot = {
-                    Enabled = true,
-                    RainbowColor = false,
-                    RainbowOutlineColor = false,
-        
-                    Color = Color3.fromRGB(255, 255, 255),
-                    Transparency = 1,
-                    Thickness = 1,
-                    NumSides = 30,
-                    Filled = false,
-        
-                    OutlineColor = Color3.fromRGB(0, 0, 0),
-                    Outline = true
-                },
-        
-                Box = {
-                    Enabled = true,
-                    RainbowColor = false,
-                    RainbowOutlineColor = false,
-        
-                    Color = Color3.fromRGB(255, 255, 255),
-                    Transparency = 1,
-                    Thickness = 1,
-                    Filled = false,
-        
-                    OutlineColor = Color3.fromRGB(0, 0, 0),
-                    Outline = true
-                },
-        
-                HealthBar = {
-                    Enabled = true,
-                    RainbowOutlineColor = false,
-                    Offset = 4,
-                    Blue = 100,
-                    Position = 3, -- 1 = Top; 2 = Bottom; 3 = Left; 4 = Right
-        
-                    Thickness = 1,
-                    Transparency = 1,
-        
-                    OutlineColor = Color3.fromRGB(0, 0, 0),
-                    Outline = true
-                },
-        
-                Crosshair = {
-                    Enabled = true,
-                    RainbowColor = false,
-                    RainbowOutlineColor = false,
-                    TStyled = false,
-                    Position = 1, -- 1 = Mouse; 2 = Center
-        
-                    Size = 12,
-                    GapSize = 6,
-                    Rotation = 0,
-        
-                    Rotate = false,
-                    RotateClockwise = true,
-                    RotationSpeed = 5,
-        
-                    PulseGap = false,
-                    PulsingStep = 10,
-                    PulsingSpeed = 5,
-                    PulsingBounds = {4, 8}, -- {...}[1] => GapSize Min; {...}[2] => GapSize Max
-        
-                    Color = Color3.fromRGB(0, 255, 0),
-                    Thickness = 1,
-                    Transparency = 1,
-        
-                    OutlineColor = Color3.fromRGB(0, 0, 0),
-                    Outline = true,
-        
-                    CenterDot = {
-                        Enabled = true,
-                        RainbowColor = false,
-                        RainbowOutlineColor = false,
-        
-                        Radius = 2,
-        
-                        Color = Color3.fromRGB(0, 255, 0),
-                        Transparency = 1,
-                        Thickness = 1,
-                        NumSides = 60,
-                        Filled = false,
-        
-                        OutlineColor = Color3.fromRGB(0, 0, 0),
-                        Outline = true
-                    }
-                }
-            }
-        }
+        local Players = game:GetService("Players")
+        Players.PlayerAdded:Connect(function(player)
+            player.CharacterAdded:Connect(function(character)
+                local highlight = Instance.new('Highlight')
+                highlight.Parent = character
+                local head = character:WaitForChild("Head", 10)
+                if head then
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Parent = head
+                    billboard.Size = UDim2.new(0, 200, 0, 50)
+                    billboard.StudsOffset = Vector3.new(0, 2, 0)
+                    billboard.AlwaysOnTop = true
+                    local textLabel = Instance.new("TextLabel")
+                    textLabel.Parent = billboard
+                    textLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                    textLabel.BackgroundTransparency = 1
+                    textLabel.Size = UDim2.new(1, 0, 1, 0)
+                    textLabel.Font = Enum.Font.SourceSans
+                    textLabel.Text = "100%"
+                    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    textLabel.TextSize = 60
+                else
+                    warn("Head not found for player " .. player.Name)
+                end
+            end)
+            player.AncestryChanged:Connect(function(_, parent)
+                if not parent then
+                    local character = player.Character or game.Workspace:FindFirstChild(player.Name)
+                    if character then
+                        local highlight = character:FindFirstChildOfClass("Highlight")
+                        if highlight then
+                            highlight:Destroy()
+                        end
+                    
+                        local head = character:FindFirstChild("Head")
+                        if head then
+                            local billboard = head:FindFirstChildOfClass("BillboardGui")
+                            if billboard then
+                                billboard:Destroy()
+                            end
+                        end
+                    end
+                end
+            end)
+        end)
+
 })
 
 -- Library functions
