@@ -97,7 +97,7 @@ RightGroupboxMain:AddToggle('MyToggle', {
 
     Callback = function(Value)
         print(Value)
-        local players = game.Players;
+        local players = game.players;
         for _, player in pairs(players:GetPlayers()) do
             if player == players.LocalPlayer then continue; end;
             esp:Player(player);
