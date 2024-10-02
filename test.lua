@@ -2,7 +2,14 @@
 
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/refs/heads/main/'
 
-local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local LibraryContent = game:HttpGet(repo .. 'Library.lua')
+print(LibraryContent) -- Check if the content is properly fetched
+
+local Library = loadstring(LibraryContent)()
+if not Library then
+    warn("Library failed to load.")
+end
+
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
