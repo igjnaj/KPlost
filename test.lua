@@ -1,18 +1,18 @@
--- Placeid: 17625359962, Nothing changed, in 1v1? nothing, Begin 1v1? nothing just a private server lol
-
+-- super rivals hax!
+-- recommend delta hax
+print("KPlost | Loading...")
+print("made with <3 by revmp")
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/refs/heads/main/'
-
-local LibraryContent = game:HttpGet(repo .. 'Library.lua')
-print(LibraryContent) -- Check if the content is properly fetched
-
-local Library = loadstring(LibraryContent)()
-if not Library then
-    warn("Library failed to load.")
-end
-
+local Library = game:HttpGet(repo .. 'Library.lua')
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
-
+--function, i dunno why i add here lol. also this is skidded
+local function toggleTableAttribute(attribute, value)
+    for _, gcVal in pairs(getgc(true)) do
+        if type(gcVal) == "table" and rawget(gcVal, attribute) then
+            gcVal[attribute] = value
+        end
+    end
 local Window = Library:CreateWindow({
     Title = 'KPlost | Rivals',
     Center = true,
@@ -25,40 +25,29 @@ local Tabs = {
     Misc = Window:AddTab('Misc'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
-
-local LeftGroupBoxMain = Tabs.Misc:AddLeftGroupbox('Gun')
-LeftGroupBoxMain:AddLabel('HIGH RISK OF BAN! Use on an ALT!')
-LeftGroupBoxMain:AddToggle('MyToggle', {
+local mainrgroup = Tabs.Main:AddRightGroupBox('placeholder')
+local mainlgroup = Tabs.Main:AddLeftGroupBox('Gun')
+local mainldgroup = Tabs.Main:AddLeftGroupBox('ESP') --left down
+mainrgroup:AddLabel('HIGH RISK OF BAN! USE ALT!')
+mainrgroup:AddToggle('PlaceholderToggle', {
     Text = 'This is a toggle',
-    Default = true, -- Default value (true / false)
-    Tooltip = 'PlaceHolder Toggle', -- Information shown when you hover over the toggle
+    Default = true,
+    Tooltip = 'PlaceHolder Toggle',
 
     Callback = function(Value)
         print('[cb] MyToggle changed to:', Value)
     end
 })
---Toggles.MyToggle:OnChanged(function()
---    -- here we get our toggle object & then get its value
---    print('MyToggle changed to:', Toggles.MyToggle.Value)
---end)
---Toggles.MyToggle:SetValue(false)
-local MyButton = LeftGroupBoxMain:AddButton({
+local MyButton = mainrgroup:AddButton({
     Text = 'Button',
     Func = function()
         print('You clicked a button!')
     end,
     DoubleClick = false,
-    Tooltip = 'This is the main button',
+    Tooltip = 'another place holder lol',
 })
-local function toggleTableAttribute(attribute, value)
-    for _, gcVal in pairs(getgc(true)) do
-        if type(gcVal) == "table" and rawget(gcVal, attribute) then
-            gcVal[attribute] = value
-        end
-    end
-end
-LeftGroupBoxMain:AddLabel('Client side!')
-LeftGroupBoxMain:AddSlider('shootCoolDown', {
+-- end of main RIGHt group, start main Left group
+mainlgroup:AddSlider('shootCoolDown', {
     Text = 'Shoot Cooldown',
     Default = 0,
     Min = 0,
@@ -70,7 +59,7 @@ LeftGroupBoxMain:AddSlider('shootCoolDown', {
         toggleTableAttribute("ShootCooldown", Value)
     end
 })
-LeftGroupBoxMain:AddSlider('shootRecoil', {
+mainlgroup:AddSlider('shootRecoil', {
     Text = 'Shoot Recoil',
     Default = 0,
     Min = 0,
@@ -82,7 +71,7 @@ LeftGroupBoxMain:AddSlider('shootRecoil', {
         toggleTableAttribute("ShootRecoil", Value)
     end
 })
-LeftGroupBoxMain:AddSlider('shootSpread', {
+mainlgroup:AddSlider('shootSpread', {
     Text = 'Shoot Spread',
     Default = 0,
     Min = 0,
@@ -94,68 +83,71 @@ LeftGroupBoxMain:AddSlider('shootSpread', {
         toggleTableAttribute("ShootSpread", Value)
     end
 })
-local RightGroupboxMisc = Tabs.Main:AddRightGroupbox('placeHolder');
-
-local RightGroupboxMain = Tabs.Main:AddRightGroupbox('ESP and AIM');
-RightGroupboxMain:AddToggle('MyToggle', {
+-- end of main LEFT group, start of main LEFT DOWN Group
+RightGroupboxMain:AddToggle('PlayerESP', {
     Text = 'Player ESP',
-    Default = false, -- Default value (true / false)
-    Tooltip = 'Player esp, that it', -- Information shown when you hover over the toggle
+    Default = false,
+    Tooltip = 'Player esp, that it',
 
     Callback = function(Value)
         local Players = game:GetService("Players")
-        Players.PlayerAdded:Connect(function(player)
-            player.CharacterAdded:Connect(function(character)
-                local highlight = Instance.new('Highlight')
-                highlight.Parent = character
-                local head = character:WaitForChild("Head", 10)
-                if head then
-                    local billboard = Instance.new("BillboardGui")
-                    billboard.Parent = head
-                    billboard.Size = UDim2.new(0, 200, 0, 50)
-                    billboard.StudsOffset = Vector3.new(0, 2, 0)
-                    billboard.AlwaysOnTop = true
-                    local textLabel = Instance.new("TextLabel")
-                    textLabel.Parent = billboard
-                    textLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                    textLabel.BackgroundTransparency = 1
-                    textLabel.Size = UDim2.new(1, 0, 1, 0)
-                    textLabel.Font = Enum.Font.SourceSans
-                    textLabel.Text = "100%"
-                    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                    textLabel.TextSize = 60
-                else
-                    warn("Head not found for player " .. player.Name)
-                end
-            end)
-            player.AncestryChanged:Connect(function(_, parent)
-                if not parent then
-                    local character = player.Character or game.Workspace:FindFirstChild(player.Name)
-                    if character then
-                        local highlight = character:FindFirstChildOfClass("Highlight")
-                        if highlight then
-                            highlight:Destroy()
-                        end
-                    
-                        local head = character:FindFirstChild("Head")
-                        if head then
-                            local billboard = head:FindFirstChildOfClass("BillboardGui")
-                            if billboard then
-                                billboard:Destroy()
+        if Value == true then
+            Players.PlayerAdded:Connect(function(player)
+                player.CharacterAdded:Connect(function(character)
+                    local highlight = Instance.new('Highlight')
+                    highlight.Parent = character
+                    local head = character:WaitForChild("Head", 10)
+                    if head then
+                        local billboard = Instance.new("BillboardGui")
+                        billboard.Parent = head
+                        billboard.Size = UDim2.new(0, 200, 0, 50)
+                        billboard.StudsOffset = Vector3.new(0, 2, 0)
+                        billboard.AlwaysOnTop = true
+                        local textLabel = Instance.new("TextLabel")
+                        textLabel.Parent = billboard
+                        textLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                        textLabel.BackgroundTransparency = 1
+                        textLabel.Size = UDim2.new(1, 0, 1, 0)
+                        textLabel.Font = Enum.Font.SourceSans
+                        textLabel.Text = "100%" --placeholder
+                        textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                        textLabel.TextSize = 60
+                    else
+                        warn("Head not found for player " .. player.Name)
+                    end
+                end)
+                player.AncestryChanged:Connect(function(_, parent)
+                    if not parent then
+                        local character = player.Character or game.Workspace:FindFirstChild(player.Name)
+                        if character then
+                            local highlight = character:FindFirstChildOfClass("Highlight")
+                            if highlight then
+                                highlight:Destroy()
+                            end
+                            
+                            local head = character:FindFirstChild("Head")
+                            if head then
+                                local billboard = head:FindFirstChildOfClass("BillboardGui")
+                                if billboard then
+                                    billboard:Destroy()
+                                end
                             end
                         end
                     end
-                end
+                end)
             end)
-        end)
+        else
+            if highlight then
+                highlight:Destroy()
+            end
+            if billboard then
+                billboard:Destroy()
+            end
+        end
 
 })
-
--- Library functions
--- Sets the watermark visibility
+--end
 Library:SetWatermarkVisibility(true)
-
--- Example of dynamically-updating watermark with common traits (fps and ping)
 local FrameTimer = tick()
 local FrameCounter = 0;
 local FPS = 60;
@@ -175,22 +167,25 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
     ));
 end);
 
-Library.KeybindFrame.Visible = true; -- todo: add a function for this
-
+Library.KeybindFrame.Visible = false;
 Library:OnUnload(function()
     WatermarkConnection:Disconnect()
 
     print('Unloaded!')
     Library.Unloaded = true
 end)
-
--- UI Settings
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupBox('Menu')
-
--- I set NoUI so it does not show up in the keybinds menu
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
 MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
+MenuGroup:AddToggle('KeybindFrame', {
+    Text = 'Toggle KeybindFrame',
+    Default = true,
+    Tooltip = 'Toggle a Keybind Frame to view keybinds',
 
+    Callback = function(Value)
+        Library.KeybindFrame.Visible = Value;
+    end
+})
 Library.ToggleKeybind = Options.MenuKeybind
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
