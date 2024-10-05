@@ -1,9 +1,7 @@
--- super rivals hax!
--- recommend delta hax
 print("KPlost | Loading...")
 print("made with <3 by revmp")
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/refs/heads/main/'
-local Library = game:HttpGet(repo .. 'Library.lua')
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 --function, i dunno why i add here lol. also this is skidded
