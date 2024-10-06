@@ -11,6 +11,7 @@ local function toggleTableAttribute(attribute, value)
             gcVal[attribute] = value
         end
     end
+end
 local Window = Library:CreateWindow({
     Title = 'KPlost | Rivals',
     Center = true,
@@ -18,14 +19,12 @@ local Window = Library:CreateWindow({
     TabPadding = 8,
     MenuFadeTime = 0,
 })
-local Tabs = {
-    Main = Window:AddTab('Main'),
-    Misc = Window:AddTab('Misc'),
-    ['UI Settings'] = Window:AddTab('UI Settings'),
-}
-local mainrgroup = Tabs.Main:AddRightGroupBox('placeholder')
-local mainlgroup = Tabs.Main:AddLeftGroupBox('Gun')
-local mainldgroup = Tabs.Main:AddLeftGroupBox('ESP') --left down
+local Main = Window:AddTab('Main')
+local Misc = Window:AddTab('Misc')
+local UISettings = Window:AddTab('UI Settings')
+local mainlgroup = Main:AddLeftGroupBox('Gun');
+local mainrgroup = Main:AddRightGroupBox('placeholder');
+task.wait(3)
 mainrgroup:AddLabel('HIGH RISK OF BAN! USE ALT!')
 mainrgroup:AddToggle('PlaceholderToggle', {
     Text = 'This is a toggle',
@@ -82,7 +81,7 @@ mainlgroup:AddSlider('shootSpread', {
     end
 })
 -- end of main LEFT group, start of main LEFT DOWN Group
-RightGroupboxMain:AddToggle('PlayerESP', {
+mainlgroup:AddToggle('PlayerESP', {
     Text = 'Player ESP',
     Default = false,
     Tooltip = 'Player esp, that it',
@@ -142,7 +141,7 @@ RightGroupboxMain:AddToggle('PlayerESP', {
                 billboard:Destroy()
             end
         end
-
+    end
 })
 --end
 Library:SetWatermarkVisibility(true)
@@ -172,7 +171,7 @@ Library:OnUnload(function()
     print('Unloaded!')
     Library.Unloaded = true
 end)
-local MenuGroup = Tabs['UI Settings']:AddLeftGroupBox('Menu')
+local MenuGroup = UISettings:AddLeftGroupBox('Menu')
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
 MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
 MenuGroup:AddToggle('KeybindFrame', {
